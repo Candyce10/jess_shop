@@ -21,10 +21,10 @@ class About(TemplateView):
 
  #adds artist class for mock database data
 class Product:
-    def __init__(self, name, image, bio, ingredients):
+    def __init__(self, name, image, description, ingredients):
         self.name = name
         self.image = image
-        self.bio = bio
+        self.description = description
         self.ingredients = ingredients
 
 
