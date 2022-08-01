@@ -22,6 +22,14 @@ class About(TemplateView):
     template_name = "about.html"
 
 
+class FAQ(View):
+    def get(self, request):
+        return HttpResponse("Gainzz & Curvezz FAQ")
+
+class FAQ(TemplateView):
+    template_name = "FAQ.html"
+
+
 
 class ProductList(TemplateView):
     template_name = "product_list.html"

@@ -1,4 +1,6 @@
 {% extends 'base.html' %} 
+{% block title %}{{product.name}}{% endblock  %}
+
 {% block content %}
 <div class="detail__img">
     <img src="{{product.img}}" alt="{{product.name}}" />
