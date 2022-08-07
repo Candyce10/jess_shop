@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View 
 from django.http import HttpResponse
 from django.views.generic.base import TemplateView
-from .models import Product
+from .models import *
 from django.views.generic import DetailView
 
 
@@ -39,6 +39,23 @@ class ProductList(TemplateView):
         context["products"] = Product.objects.all() 
         return context
 
+
 class ProductDetail(DetailView):
     model = Product
     template_name = "product_detail.html"
+
+
+
+def cart(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderproduct_set.all()
+    else:
+        items = []
+    context = {'items':items}
+    return render(request, "cart.html", context)
+
+
+
+
