@@ -7,19 +7,19 @@
 <h1 class="title pt-5">Featured Products</h1>
 <div class="gallery">
   {% for product in products %}
-  <a href="{% url 'product_detail' product.slug %}">
-    <div class="card">
+  
+    <div class="card"><a href="{% url 'product_detail' product.slug %}">
       <div class="card-image">
         <figure class="image is-square">
           <img src="{{product.img}}" alt="{{product.name}}" />
         </figure>
-      </div>
+      </div></a>
       <div class="card-header">
         <p class="card-header-title">{{product.name}}</p>
-        <button class="button is-small add-cart">Add To Cart</button>
-      </div>
+        <button data-product={{product.id}} data-action="add" class="button is-small update-cart">Add To Cart</button>
+      </div>  
     </div>
-  </a>
+
 	{% empty %}
  
   {% endfor %}
