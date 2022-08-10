@@ -7,38 +7,73 @@ from .models import *
 from django.views.generic import DetailView
 import json
 
-class Home(View):
-    def get(self, request):
-        return HttpResponse("Gainzz & Curvezz Home")
-
-class Home(TemplateView):
-    template_name = "home.html"
-
-
-class About(View):
-    def get(self, request):
-        return HttpResponse("Gainzz & Curvezz About")
-
-class About(TemplateView):
-    template_name = "about.html"
-
-
-class FAQ(View):
-    def get(self, request):
-        return HttpResponse("Gainzz & Curvezz FAQ")
-
-class FAQ(TemplateView):
-    template_name = "FAQ.html"
 
 
 
-class ProductList(TemplateView):
-    template_name = "product_list.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["products"] = Product.objects.all() 
-        return context
+def home(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderproduct_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'get_cart_subtotal': 0}
+        cartItems = order['get_cart_items']
+    products = Product.objects.all()
+    context = {'products':products, 'cartItems': cartItems}
+    return render(request, "home.html", context)
+
+
+
+def about(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderproduct_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'get_cart_subtotal': 0}
+        cartItems = order['get_cart_items']
+    products = Product.objects.all()
+    context = {'products':products, 'cartItems': cartItems}
+    return render(request, "about.html", context)
+
+
+    
+def faq(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderproduct_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'get_cart_subtotal': 0}
+        cartItems = order['get_cart_items']
+    products = Product.objects.all()
+    context = {'products':products, 'cartItems': cartItems}
+    return render(request, "FAQ.html", context)
+
+
+
+
+
+def products(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderproduct_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'get_cart_subtotal': 0}
+        cartItems = order['get_cart_items']
+    products = Product.objects.all()
+    context = {'products':products, 'cartItems': cartItems}
+    return render(request, "product_list.html", context)
 
 
 class ProductDetail(DetailView):
@@ -46,27 +81,37 @@ class ProductDetail(DetailView):
     template_name = "product_detail.html"
 
 
-
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderproduct_set.all()
+        cartItems = order.get_cart_items
+        
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0, 'get_cart_subtotal': 0}
-    context = {'items':items, 'order':order}
+        cartItems = order['get_cart_items']
+
+    context = {'items':items, 'order':order, 'cartItems': cartItems}
     return render(request, "cart.html", context)
+
+
+
 
 def checkout(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderproduct_set.all()
+        cartItems = order.get_cart_items
+
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0, 'get_cart_subtotal': 0}
-    context = {'items':items, 'order':order}
+        cartItems = order['get_cart_items']
+
+    context = {'items':items, 'order':order, 'cartItems': cartItems}
     return render(request, "checkout.html", context)
 
 
@@ -91,7 +136,7 @@ def updateItem(request):
 
     orderItem.save()
 
-    if order.quantity <=0:
+    if orderItem.quantity <=0:
         orderItem.delete()
     
     return JsonResponse('Item was added', safe = False)
