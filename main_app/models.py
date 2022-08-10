@@ -65,6 +65,7 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
+     
     
 
 class OrderProduct(models.Model):

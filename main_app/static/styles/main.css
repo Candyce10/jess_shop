@@ -78,4 +78,6 @@ p {
     }
     }
 
-    
+  #ship-info {
+    display: none;
+  }
